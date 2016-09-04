@@ -10,13 +10,52 @@ type MainController struct {
 }
 
 func (c *MainController) IndexGet() {
-	c.TplName = "index.tpl"
+	c.TplName = "index.html"
 	//c.Data["Website"] = "beego.me"
 	//c.Data["Email"] = "astaxie@gmail.com"
-	//c.TplName = "index.tpl"
+	//c.TplName = "index.html"
 }
 
 func (c *MainController) IndexPost() {
+	username := c.GetString("username")
+	password := c.GetString("password")
+	user, err := models.GetUserByUsername(username)
+	if err != nil {
+		//c.Ctx.Redirect(302,"/")
+		//c.TplName="index.html"
+		c.Data["json"] = "用户名错误!"
+		//c.Ctx.Output
+		c.ServeJSON()
+	}
+	if user.Password == password {
+		//c.Ctx.Redirect(302,"login.html")
+		c.Data["json"] = "OK"
+		c.ServeJSON()
+		//c.TplName="login.html"
+	} else {
+		c.Ctx.Redirect(302,"/")
+
+		//c.TplName="index.html"
+		c.Data["json"] = "密码错误!"
+		c.ServeJSON()
+	}
+
+}
+
+func (c *MainController) LoginGet() {
+	c.TplName = "login.html"
+}
+
+func (c *MainController) LoginPost() {
+
+}
+
+func (c *MainController) RegeditGet() {
+	//c.Data["error"]=c.Data["regedit"]
+	c.TplName = "regedit.html"
+}
+
+func (c *MainController) RegeditPost() {
 	username := c.GetString("username")
 	password := c.GetString("password")
 	email := c.GetString("email")
@@ -26,50 +65,38 @@ func (c *MainController) IndexPost() {
 	user.Username = username
 	user.Password = password
 
-	if models.CheckUser(&user) {
-		c.Data["json"] = "用户已存在!"
-		c.ServeJSON()
-	} else {
-		if username != nil; password != nil {
-			_, err := models.AddUser(&user)
-			if err != nil {
-				c.Data["json"] = "添加失败"
-				c.ServeJSON()
-			} else {
-				c.Data["json"] = "添加成功"
-				c.ServeJSON()
-			}
+	if models.CheckUserName(&user) {
+		c.Data["json"] = "用户名已存在!"
+		//c.ServeJSON()
+		c.Ctx.Redirect(302,"regedit.html")
+	} else if models.CheckUserEmail(&user){
+		c.Data["json"]="邮箱已注册"
+		c.Ctx.Redirect(302,"regedit.html")
+	}else{
+
+		// if username != nil; password != nil {
+		_, err := models.AddUser(&user)
+		if err != nil {
+			c.Data["json"] = "添加失败"
+			//c.ServeJSON()
+			c.Ctx.Redirect(302,"regedit.html")
+			//c.TplName="index.html"
+
 		} else {
-			c.Data["json"] = "用户名或密码为空，无法添加!"
-			c.ServeJSON()
+			c.Data["json"] = "添加成功"
+			//c.ServeJSON()
+			//c.Ctx.Output.JSON(c.Data["json"],true)
+			c.Ctx.Redirect(302,"/")
+
+			//c.TplName="login.html"
+
 		}
+		// } else {
+		// 	c.Data["json"] = "用户名或密码为空，无法添加!"
+
+		// }
 
 	}
-
-}
-
-func (c *MainController) LoginGet() {
-	c.TplName = "login.tpl"
-}
-
-func (c *MainController) LoginPost() {
-	username := c.GetString("username")
-	password := c.GetString("password")
-	user, err := models.GetUserByUsername(username)
-	if err != nil {
-		c.Ctx.WriteString("用户名错误!")
-	}
-	if user.Password == password {
-		c.Ctx.WriteString("登录成功!")
-	} else {
-		c.Ctx.WriteString("密码错误!")
-	}
-}
-
-func (c *MainController) RegeditGet() {
-	c.TplName = "regedit.tpl"
-}
-
-func (c *MainController) RegeditPost() {
+	//c.ServeJSON()
 
 }

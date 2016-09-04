@@ -1,0 +1,28 @@
+<html>
+<title>登录页面</title>
+<body>
+<form action="/" method="post" onsubmit="return login();">
+  username:<input type="text" name="username" id="uName">
+  password:<input type="password" name="password" id="uPass">
+  <input type="submit" value="登录">
+
+  <a href="regedit"><input type="button" value="注册"></a>
+
+</form>
+<script >
+  function login() {
+    var username=$("#uName").val();
+    var password=$("#uPass").val();
+    if(username==""||username==null){
+      alert("请输入用户名");
+      return false;
+    }else if(password==""||password==null){
+      alert("请输入密码");
+      return false;
+    }else{
+      return true;
+    }
+  }
+</script>
+</body>
+</html>

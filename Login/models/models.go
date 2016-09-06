@@ -2,6 +2,7 @@ package models
 
 import (
 	"github.com/astaxie/beego/orm"
+	//"github.com/astaxie/beego/validation"
 	_ "github.com/go-sql-driver/mysql"
 )
 
@@ -9,7 +10,7 @@ type User struct {
 	Id       int    `orm:"cloumn(id);auto" `
 	Username string `orm:"cloumn(username);size(20)"`
 	Password string `orm:"cloumn(password);size(20)"`
-	Email    string `orm:"cloumn(email);size(20)"`
+	Email    string `orm:"cloumn(email);size(20)",valid:"Email;"`//检查格式
 }
 
 func (c *User) TableName() string {
@@ -52,11 +53,11 @@ func GetUserByUsername(username string) (v *User, err error) {
 }
 
 //根据email获取用户信息
-/*func GetUserByEmail(email string) (v *User, err error) {
+func GetUserByEmail(email string) (v *User, err error) {
 	o := orm.NewOrm()
 	v = &User{Email: email}
 	if err = o.Read(v, "Email"); err != nil {
 		return
 	}
 	return
-}*/
+}

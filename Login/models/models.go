@@ -2,7 +2,6 @@ package models
 
 import (
 	"github.com/astaxie/beego/orm"
-	//"github.com/astaxie/beego/validation"
 	_ "github.com/go-sql-driver/mysql"
 )
 
@@ -10,7 +9,7 @@ type User struct {
 	Id       int    `orm:"cloumn(id);auto" `
 	Username string `orm:"cloumn(username);size(20)"`
 	Password string `orm:"cloumn(password);size(20)"`
-	Email    string `orm:"cloumn(email);size(20)",valid:"Email;"`//检查格式
+	Email    string `orm:"cloumn(email);size(20)"`
 }
 
 func (c *User) TableName() string {
@@ -36,10 +35,11 @@ func CheckUserName(m *User) bool {
 	o := orm.NewOrm()
 	return o.QueryTable(new(User)).Filter("username", m.Username).Exist()
 }
+
 //检查email是否存在
-func CheckUserEmail(m *User) bool{
-	o:=orm.NewOrm()
-	return o.QueryTable(new(User)).Filter("email",m.Email).Exist()
+func CheckUserEmail(m *User) bool {
+	o := orm.NewOrm()
+	return o.QueryTable(new(User)).Filter("email", m.Email).Exist()
 }
 
 //根据用户名获取用户信息
@@ -53,11 +53,11 @@ func GetUserByUsername(username string) (v *User, err error) {
 }
 
 //根据email获取用户信息
-func GetUserByEmail(email string) (v *User, err error) {
-	o := orm.NewOrm()
-	v = &User{Email: email}
-	if err = o.Read(v, "Email"); err != nil {
-		return
-	}
-	return
-}
+// func GetUserByEmail(email string) (v *User, err error) {
+// 	o := orm.NewOrm()
+// 	v = &User{Email: email}
+// 	if err = o.Read(v, "Email"); err != nil {
+// 		return
+// 	}
+// 	return
+// }

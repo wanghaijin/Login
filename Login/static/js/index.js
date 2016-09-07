@@ -3,7 +3,7 @@
  */
 $(function () {
     $("#btnReg").click(function () {
-        window.location.href="/regedit";
+        window.location.href="/register";
     });
 
     $("#btnLogin").click(function () {
@@ -28,13 +28,13 @@ $(function () {
             data:{"username":username,"password":password},
             success:function(data){
                 if(data=="OK"){
-                    showWarning();
+                    showWarning("登录成功!");
                 }else{
-                    showWarning();
+                    showWarning(data);
                 }
             },
             error:function () {
-                showWarning()
+                showWarning("账号或密码错误!")
 
             }
         });

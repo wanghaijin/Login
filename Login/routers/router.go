@@ -8,6 +8,7 @@ import (
 func init() {
 	beego.Router("/", &controllers.MainController{}, "get:IndexGet")
 	beego.Router("/", &controllers.MainController{}, "post:IndexPost")
-	beego.Router("/regedit", &controllers.MainController{}, "get:RegeditGet")
-	beego.Router("/regedit", &controllers.MainController{}, "post:RegeditPost")
+	beego.Router("/register", &controllers.MainController{}, "get:RegisterGet")
+	beego.Router("/register", &controllers.MainController{}, "post:RegisterPost")
+	beego.Router("/cache", &controllers.MainController{}, "get:CacheGet")
 }

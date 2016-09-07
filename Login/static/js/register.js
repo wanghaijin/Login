@@ -20,7 +20,7 @@ $(function () {
         var password = $("#password").val();
         //获取email
         var email = $("#email").val();
-        //Email格式
+        // Email格式
         var emailreg= /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/;
         if (username == "") {
             showWarning("请输入用户名!");
@@ -42,21 +42,21 @@ $(function () {
         //提交数据
         $.ajax({
             type: "POST",
-            url: "/regedit",
+            url: "/register",
             data: {"username": username, "password": password, "email": email},
             success: function (data) {
                 if (data != "OK") {
-                    showWarning();
+                    showWarning(data);
                 } else {
-                    // window.location.href = "/";
-                    showWarning();
-
+                    // showWarning("注册成功！")
+                    window.location.href = "/cache";
                 }
             },
-            error: function (data) {
-                showWarning();
+            error: function () {
+                showWarning("注册失败!");
             }
         });
+
     }
 
 

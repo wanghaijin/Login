@@ -2,9 +2,7 @@ package controllers
 
 import (
 	"Login/models"
-	//"fmt"
 	"github.com/astaxie/beego"
-
 )
 
 type MainController struct {
@@ -19,20 +17,13 @@ func (c *MainController) IndexPost() {
 
 	username := c.GetString("username")
 	password := c.GetString("password")
-	email := c.GetString("email")
 
-
-	user, errU := models.GetUserByUsername(username)
-	if errU != nil {
+	user, err := models.GetUserByUsername(username)
+	if err != nil {
 		c.Data["json"] = "用户名错误!"
 		c.ServeJSON()
 	}
-	_,errE:=models.GetUserByEmail(email)
-	if  errE!=nil{
-		c.Data["json"]="邮箱错误!"
-		c.ServeJSON()
 
-	}
 	if user.Password == password {
 		c.Data["json"] = "OK"
 		c.ServeJSON()
@@ -43,14 +34,12 @@ func (c *MainController) IndexPost() {
 
 }
 
+func (c *MainController) RegisterGet() {
 
-
-func (c *MainController) RegeditGet() {
-
-	c.TplName = "regedit.html"
+	c.TplName = "register.html"
 }
 
-func (c *MainController) RegeditPost() {
+func (c *MainController) RegisterPost() {
 
 	username := c.GetString("username")
 	password := c.GetString("password")
@@ -65,24 +54,27 @@ func (c *MainController) RegeditPost() {
 		c.Data["json"] = "用户名已存在!"
 		c.ServeJSON()
 
-	} else if models.CheckUserEmail(&user){
-		c.Data["json"]="邮箱已注册"
+	} else if models.CheckUserEmail(&user) {
+		c.Data["json"] = "邮箱已注册"
 		c.ServeJSON()
 
-	}else{
-
+	} else {
 
 		_, err := models.AddUser(&user)
 		if err != nil {
-			c.Data["json"]="添加失败"
+			c.Data["json"] = "添加失败"
 			c.ServeJSON()
-
 
 		} else {
-			c.Data["json"]="添加成功,请登录！"
+			c.Data["json"] = "OK"
 			c.ServeJSON()
+			c.Redirect("/cache", 302)
 		}
 
 	}
 
+}
+
+func (c *MainController) CacheGet() {
+	c.TplName = "cache.html"
 }
